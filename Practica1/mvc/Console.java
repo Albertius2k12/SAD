@@ -8,7 +8,7 @@ public class Console implements Observer{
 	}
 
 	public void update(Observable o, Object arg){
-		if(o instanceof Line){	//check if the Observable object (o) is an instance of the MyObservable class or its subclass
+		if(o instanceof Line){	//check if the Observable object (o) is an instance of the Line class or its subclass (the one is being observed)
 			System.out.print(arg.toString());
 		}	
 	}
