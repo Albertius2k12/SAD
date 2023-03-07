@@ -98,6 +98,7 @@ public class EditableBufferedReader extends BufferedReader{
 			}
 			word = this.read();
 		}
+		this.unsetRaw();
 		return line.getString();
 	}
 }

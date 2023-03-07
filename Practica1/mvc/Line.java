@@ -6,17 +6,20 @@ public class Line extends Observable{
 
     private ArrayList<Character> line;
     private int pos;    //posicion del cursor
+    private Object[] vector;
 
     public Line(){
         line = new ArrayList<>();
         pos = 0;
+        //Object vector [] = new Object[2];
+        vector = new Object[2];
     }
     
     public void right(){
         if(!this.line.isEmpty() && pos != this.line.size()){
             pos++;
             this.setChanged();                     //marca a line (observando) como que ha cambiado --> hasChanged method return true now
-            this.notifyObservers("\033[C");        //si Line ha cambiado --> hasChanged returns true, notifica a los observers de Line q ha cambiado
+            this.notifyObservers(new Console.Command(Console.Action.RIGHT, null));
         }
     }
     
@@ -24,7 +27,7 @@ public class Line extends Observable{
         if(pos != 0){
             pos--;
             this.setChanged();
-            this.notifyObservers("\033[D");
+             this.notifyObservers(new Console.Command(Console.Action.LEFT, null));
         } 
     }
     
@@ -32,14 +35,17 @@ public class Line extends Observable{
         line.add(pos,c);
         pos++;
         this.setChanged();
-        this.notifyObservers("\033[@" + c);    //default del switch de console
+        this.notifyObservers(new Console.Command(Console.Action.DEF, c));
     }
     
     public void overwriteChar(char c){
         this.line.set(pos,c);
         pos ++;
         this.setChanged();
-        this.notifyObservers(c);
+        /*vector[0] = -2;
+        vector[1] = c;
+        this.notifyObservers(vector);*/
+        this.notifyObservers(new Console.Command(Console.Action.INS, c));
     }
     
     public void delete(){
@@ -47,7 +53,7 @@ public class Line extends Observable{
             this.line.remove(pos-1); //eliminas el caracter de la izquierda cursor
             pos--;
             this.setChanged();
-            this.notifyObservers((char) 27 + "[D" + (char) 27 + "[1P");
+            this.notifyObservers(new Console.Command(Console.Action.DELETE, null));
         } 
     }
     
@@ -56,16 +62,15 @@ public class Line extends Observable{
         if(!this.line.isEmpty() && line.size() != pos){
             this.line.remove(pos);
             this.setChanged();
-            this.notifyObservers("\033[1P");
+            this.notifyObservers(new Console.Command(Console.Action.SUPR, null));
         }
     }
     
     public void home(){
         int pos2 = pos;
         pos = 0;
-        //if(pos2 != 0)
         this.setChanged();
-        this.notifyObservers((char) 27 + "[" + pos2 + "D");      
+        this.notifyObservers(new Console.Command(Console.Action.HOME, pos2));
     }
     
     public void end(){
@@ -74,7 +79,7 @@ public class Line extends Observable{
         int res = pos-pos2;
         if(res != 0){
             this.setChanged();
-            this.notifyObservers((char) 27 + "[" + (pos-pos2) + "C");
+            this.notifyObservers(new Console.Command(Console.Action.END, res));
         }
     }
     
