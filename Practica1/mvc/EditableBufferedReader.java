@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Observer;
+import java.util.Observable;
 
 public class EditableBufferedReader extends BufferedReader{
 
@@ -37,11 +39,12 @@ public class EditableBufferedReader extends BufferedReader{
 					return HOME;
 				case 'B':
 					return END; 
+				case 51:
+					super.read();
+					return SUPR;
 				default:
 					return 0;					
 			}
-		} else if(word == 35){	//corresponde a '#' en ASCII
-			return SUPR;
 		} else if(word == 64){ 	//corresponde a '@' en ASCII
 			return INS;
 		} else{
@@ -83,18 +86,10 @@ public class EditableBufferedReader extends BufferedReader{
 					line.suprimir();
 					break;
 				case INS:
-					if(insertar){			//si clicas insertar se mantiene hasta q vuelves a clicar
-						insertar = false;
-					} else{
-						insertar = true;
-					}
+					line.overwriteChar();
 					break;
 				default:
-					if(insertar){
-						line.overwriteChar((char) word);
-					}else{
-						line.insertChar((char) word);
-					}
+					line.insertChar((char) word);
 			}
 			word = this.read();
 		}

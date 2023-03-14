@@ -7,10 +7,12 @@ public class Line extends Observable{
     private ArrayList<Character> line;
     private int pos;    //posicion del cursor
     private Object[] vector;
+    private boolean insertar;
 
     public Line(){
         line = new ArrayList<>();
         pos = 0;
+        insertar = false;
         //Object vector [] = new Object[2];
         vector = new Object[2];
     }
@@ -32,20 +34,25 @@ public class Line extends Observable{
     }
     
     public void insertChar(char c){
-        line.add(pos,c);
-        pos++;
-        this.setChanged();
-        this.notifyObservers(new Console.Command(Console.Action.DEF, c));
+        if(insertar){
+            this.line.set(pos,c);
+            this.setChanged();
+            this.notifyObservers(new Console.Command(Console.Action.INS, c));
+            pos++;
+        }else{
+            line.add(pos,c);
+            this.setChanged();
+            this.notifyObservers(new Console.Command(Console.Action.DEF, c));
+            pos++;
+        }
     }
     
-    public void overwriteChar(char c){
-        this.line.set(pos,c);
-        pos ++;
-        this.setChanged();
-        /*vector[0] = -2;
-        vector[1] = c;
-        this.notifyObservers(vector);*/
-        this.notifyObservers(new Console.Command(Console.Action.INS, c));
+    public void overwriteChar(){
+        if(insertar){
+            insertar = false;
+        }else{
+            insertar = true;
+        }
     }
     
     public void delete(){

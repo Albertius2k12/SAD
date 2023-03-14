@@ -4,7 +4,7 @@ public class EditableBufferedReader extends BufferedReader{
 
 	public static final int RIGHT = 2;
 	public static final int LEFT = 3;
-	public static final int SUPR = 4;	//para SUPR --> #
+	public static final int SUPR = 4;	//para SUPR --> 'fn' + 'DEL'
 	public static final int HOME = 6;
 	public static final int END = 7;
 	public static final int INS = 8;
@@ -37,11 +37,12 @@ public class EditableBufferedReader extends BufferedReader{
 					return HOME;
 				case 'B':
 					return END; 
+				case 51:
+					super.read();
+					return SUPR;
 				default:
 					return 0;					
 			}
-		} else if(word == 35){	//corresponde a '#' en ASCII
-			return SUPR;
 		} else if(word == 64){ 	//corresponde a '@' en ASCII
 			return INS;
 		} else{
@@ -57,15 +58,13 @@ public class EditableBufferedReader extends BufferedReader{
 	
 	public String readLine() throws IOException{
 		Line line = new Line();
-		boolean insertar = false;
+		//boolean insertar = false;
 		this.setRaw();
 		int word = this.read();
 		while(word != 13){ // En linux ENTER es CR --> 13 en ASCII
 			switch(word){
 				case LEFT:
 					if(line.left()){
-						//System.out.print((char) 27 + "[D"); //lo trata como sequencia de dos caracteres, char y string, por eso muestra por pantalla
-						//System.out.print("\b");
 						System.out.print("\033[D");
 					}
 					break;
@@ -93,22 +92,12 @@ public class EditableBufferedReader extends BufferedReader{
 						System.out.print("\033[1P");
 					}break;
 				case INS:
-					if(insertar){			//si clicas insertar se mantiene hasta q vuelves a clicar
-						insertar = false;
-					} else{
-						insertar = true;
-					}
+					line.overwriteChar();
 					break;
 										
 				default:
-					if(insertar){
-						line.overwriteChar((char) word);
-					}else{
-						line.insertChar((char) word);
-						System.out.print("\033[@");	//insert a blank character
-					}
-					//System.out.print("\033[@");	//insert a blank character
-					System.out.print((char) word);	//fa el print del char en el blank space
+					line.insertChar((char) word);
+					System.out.print((char) word);
 					 
 			}
 			word = this.read();

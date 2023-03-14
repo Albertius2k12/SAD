@@ -5,8 +5,10 @@ public class Line{
 
 	private ArrayList<Character> line;	//guarda chars
 	private int pos;	//posicion del cursor
+	private boolean insertar;
 
 	public Line(){
+		insertar = false;
 		line = new ArrayList<>();
 		pos = 0;
 	}
@@ -26,13 +28,27 @@ public class Line{
 	}
 	
 	public void insertChar(char c){
-		line.add(pos,c);
-		pos++;
+		if(this.insertar){
+			this.line.set(pos, c);
+			pos++;
+		}else{
+			line.add(pos,c);
+			System.out.print("\033[@");	//fa el print del char en el blank space
+			pos++;
+		}
+
+		/*line.add(pos,c);
+		pos++;*/
 	}
 	
-	public void overwriteChar(char c){
-		this.line.set(pos,c);
-		pos ++;
+	public void overwriteChar(){
+		if(insertar){			//si clicas insertar se mantiene hasta q vuelves a clicar
+			insertar = false;
+		} else{
+			insertar = true;
+		}
+		//this.line.set(pos,c);
+		//pos ++;
 	}
 	
 	public boolean delete(){
