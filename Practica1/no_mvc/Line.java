@@ -81,10 +81,10 @@ public class Line{
 	}
 	
 	public String getString(){
-		String frase = "";
-		for(int i = 0 ; i < line.size() ; i++){
-			frase = frase + this.line.get(i);
+		StringBuilder sb = new StringBuilder(this.line.size());
+		for(Character ch : this.line){
+			sb.append(ch);
 		}
-		return frase;
+		return sb.toString();
 	}
 }

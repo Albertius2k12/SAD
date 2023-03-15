@@ -91,10 +91,10 @@ public class Line extends Observable{
     }
     
     public String getString(){
-        String frase = "";
-        for(int i = 0 ; i < line.size() ; i++){
-            frase = frase + this.line.get(i);
-        }
-        return frase;
+        StringBuilder sb = new StringBuilder(this.line.size());
+		for(Character ch : this.line){
+			sb.append(ch);
+		}
+		return sb.toString();
     }
 }
