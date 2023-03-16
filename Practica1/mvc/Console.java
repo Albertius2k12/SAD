@@ -6,7 +6,7 @@ public class Console implements Observer{
 
 	static enum Action{
 
-		RIGHT, LEFT, DELETE, HOME, END, SUPR, INS, DEF;	//diferent options
+		RIGHT, LEFT, DELETE, HOME, END, SUPR, INS, DEF;	//diferent options, like a state
 	}
 
 	static class Command{

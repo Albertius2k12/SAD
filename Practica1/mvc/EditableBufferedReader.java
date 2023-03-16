@@ -6,10 +6,10 @@ public class EditableBufferedReader extends BufferedReader{
 
 	public static final int RIGHT = 2;
 	public static final int LEFT = 3;
-	public static final int SUPR = 4;	//para SUPR --> #
+	public static final int SUPR = 4;	//para SUPR --> 'fn' + 'DEL'
 	public static final int HOME = 6;
 	public static final int END = 7;
-	public static final int INS = 8;
+	public static final int INS = 8;	//para insert --> 'option' + 'right_arrow'
 
 	public static final int DELETE = 127; //sequencia de control, en ASCII --> 127 
 
@@ -29,7 +29,10 @@ public class EditableBufferedReader extends BufferedReader{
 	public int read() throws IOException{
 		int word = super.read();
 		if(word == 27){	//correspon al ESC en ascii
-			super.read(); //et saltes el [
+			int second = super.read();	//compruevas si es un insert y et saltes el [ si no lo es
+				if(second == 'f'){
+					return INS;
+				}
 			switch(super.read()){
 				case 'D':
 					return LEFT;
@@ -45,12 +48,9 @@ public class EditableBufferedReader extends BufferedReader{
 				default:
 					return 0;					
 			}
-		} else if(word == 64){ 	//corresponde a '@' en ASCII
-			return INS;
-		} else{
-			return word;
-		}
-		
+		}else{
+			return word;	
+		}	
 	}
 	
 	/*	\ --> para indicar el comienzo de sequencia de escape
