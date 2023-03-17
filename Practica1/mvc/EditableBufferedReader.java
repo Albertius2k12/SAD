@@ -4,12 +4,12 @@ import java.util.Observable;
 
 public class EditableBufferedReader extends BufferedReader{
 
-	public static final int RIGHT = 2;
-	public static final int LEFT = 3;
-	public static final int SUPR = 4;	//para SUPR --> 'fn' + 'DEL'
-	public static final int HOME = 6;
-	public static final int END = 7;
-	public static final int INS = 8;	//para insert --> 'option' + 'right_arrow'
+	public static final int RIGHT = 1000;
+	public static final int LEFT = 1001;
+	public static final int SUPR = 1002;	//para SUPR --> 'fn' + 'DEL'
+	public static final int HOME = 1003;
+	public static final int END = 1004;
+	public static final int INS = 1005;	//para insert --> 'option' + 'right_arrow'
 
 	public static final int DELETE = 127; //sequencia de control, en ASCII --> 127 
 
